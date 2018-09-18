@@ -1,3 +1,4 @@
+import java.util.*;
 class factorial{
 	public int fun(int x){
 		if(x==1)
@@ -7,6 +8,8 @@ class factorial{
 	}
 	public static void main(String []a){
 		factorial ob=new factorial();
-		System.out.print(" factorial of 6 is:"+ob.fun(6));
+		Scanner ab=new Scanner(System.in);
+		int y=ab.nextInt();
+		System.out.print(" factorial of 6 is:"+ob.fun(y));
 	}
 }
