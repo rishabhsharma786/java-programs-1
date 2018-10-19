@@ -4,39 +4,40 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
-import static javafx.scene.paint.Color.rgb;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-
 public class ludo extends JFrame { 
-     int temp1,temp2,temp3,temp4;                             // to store current position
-     int gtd;                                                 //gtd=going to die
+     int temp1,temp2,temp3,temp4;                             // to store current position 
      int x=0,y=0,WIDTH=30,HEIGHT=30,flag=0,dice;
      JLabel winner=new JLabel();
      Font f;
      boolean player1=true,player2=false,player3=false,player4=false;  //to find whose turn is currently on alive
      boolean isalive1=false,isalive2=false,isalive3=false,isalive4=false;   //run one time when player got 1 first time
-     boolean finish1=false,finish2=false,finish3=false,finish4=false;
+     boolean finish1=false,finish2=false,finish3=false,finish4=false;      //to see who hase reached at his goal
      boolean iswin=false;
      Random r=new Random();
      JTextField d=new JTextField();
      JButton b=new JButton("DICE");
+     JButton restart=new JButton("RESTART");
      JTextField p1=new JTextField("O1");
      JTextField p2=new JTextField("O2");
      JTextField p3=new JTextField("O3");
      JTextField p4=new JTextField("O4");
      JTextField t [] =new JTextField[73]; 
      JLabel l1 = new JLabel("Ludo");
+     JLabel masthead=new JLabel("Lalit:Founder & CEO                                                                                                                                                                                        Rishabh:Co-Founder & CFO");
      public ludo()
      {       
              
          l1.setBounds(550, 50, 150, 100);
-         winner.setBounds(520, 390, 300, 150);
+         masthead.setBounds(5, 550, 1000, 20);
+         winner.setBounds(520, 400, 300, 150);
+         restart.setBounds(550, 390, 130, 50);
          //decorations start............
-         
+         setTitle("Ludo");
          winner.setFont(new Font("Arial",Font.BOLD,32));
          l1.setFont(new Font("Arial",Font.BOLD,60));
          b.setFont(new Font("Arial",Font.BOLD,20));
@@ -48,15 +49,21 @@ public class ludo extends JFrame {
          p2.setMargin(new Insets(60,70,50,50));
          p3.setMargin(new Insets(60,70,50,50));
          p4.setMargin(new Insets(60,70,50,50));
-         p1.setBackground(new Color(255,100,100));
+         p1.setBackground(new Color(127,227,127));          //Green
          p2.setBackground(new Color(127,227,127));
          p3.setBackground(new Color(127,227,127));
          p4.setBackground(new Color(127,227,127));
-         b.setBackground(new Color(100,200,250));
+         b.setBackground(new Color(100,200,250));           //Blue
          d.setMargin(new Insets(0,15,0,0));
          d.setFont(new Font("Arial",Font.BOLD,30));
+         masthead.setFont(new Font("SansSerif",Font.BOLD,10));
+         restart.setFont(new Font("Arial",Font.BOLD,20));
+         restart.setBackground(new Color(100,200,250));
+         
          //decorations end.........
          add(l1);
+         add(masthead);
+         add(restart);
          add(b);
          add(d);
          add(p1);
@@ -70,13 +77,13 @@ public class ludo extends JFrame {
          setResizable(false);
          setDefaultCloseOperation(3);
          
-         
          for(int i=0;i<73;i++)
          {
            t[i]=new JTextField(); 
            add(t[i]);
            t[i].setMargin(new Insets(0,5,0,0));
            t[i].setFont(new Font("Arial",Font.BOLD,14));
+           t[i].setBackground(new Color(255,255,227));                //Brown light
          }
          for(int i=0;i<73;i++)              //starting of for loop for setBounds of blocks
          {
@@ -188,15 +195,44 @@ public class ludo extends JFrame {
          }
         }                                                //end of for loop for setBounds
       t[57].setBounds(210, 210, 90, 90);      //the final block or center block  
-      b.setBounds(550, 200, 100, 50);         //click to play      
-      d.setBounds(550, 300, 50, 50);          //random variable textfield            
+      b.setBounds(550, 190, 100, 50);         //click to play      
+      d.setBounds(550, 290, 50, 50);          //random variable textfield            
       p1.setBounds(30, 30, 180, 180);         
       p2.setBounds(300, 30, 180, 180);
       p3.setBounds(300, 300, 180, 180);
       p4.setBounds(30, 300, 180, 180);
- 
+      t[57].setFont(new Font("Arial",Font.BOLD,30));
+      t[57].setText("KING");
+      t[57].setBackground(new Color(255,255,0));                //Yellow
+      d.setBackground(new Color(100,200,250));
          
-    
+      restart.addActionListener(new ActionListener()
+                 {
+                        public void actionPerformed(ActionEvent e){
+                            
+                            player1=true;player2=false;player3=false;player4=false;
+                            finish1=false;finish2=false;finish3=false;finish4=false;
+                            if(isalive1)
+                            t[temp1].setText(" ");
+                            if(isalive2)
+                            t[temp2].setText(" ");
+                            if(isalive3)
+                            t[temp3].setText(" ");
+                            if(isalive4)
+                            t[temp4].setText(" ");
+                            dead(1);
+                            dead(2);
+                            dead(3);
+                            dead(4);
+                            winner.setText(" ");
+                            for(int i=0;i<73;i++){
+                                if(i==57)
+                                    continue;
+                                t[i].setBackground(new Color(255,255,227));
+                            }
+                                
+                        }    
+                    });
       
       b.addActionListener(new ActionListener()
 		{
@@ -208,8 +244,6 @@ public class ludo extends JFrame {
                                 turn1();
                                 player1=false;
                                 player2=true;
-                                p2.setBackground(new Color(255,100,100));
-                                p1.setBackground(new Color(127,227,127));
                                 if(finish1)
                                     winner("O1");
                                 return;
@@ -218,8 +252,6 @@ public class ludo extends JFrame {
                                 turn2();
                                 player2=false;
                                 player3=true;
-                                p3.setBackground(new Color(255,100,100));
-                                p2.setBackground(new Color(127,227,127));
                                 if(finish2)
                                     winner("O2");
                                 return;
@@ -228,8 +260,6 @@ public class ludo extends JFrame {
                                 turn3();
                                 player3=false;
                                 player4=true;
-                                p4.setBackground(new Color(255,100,100));
-                                p3.setBackground(new Color(127,227,127));
                                 if(finish3)
                                     winner("O3");
                                 return;
@@ -238,44 +268,52 @@ public class ludo extends JFrame {
                                 turn4();
                                 player4=false;
                                 player1=true;
-                                p1.setBackground(new Color(255,100,100));
-                                p4.setBackground(new Color(127,227,127));
                                 if(finish4)
                                     winner("O4");
                                 return;
                             } 
                         }
 		});
-     }
+      
+}
      public void turn1(){
              if(temp1<57&&isalive1){
                 t[temp1].setText(" ");
+                t[temp1].setBackground(new Color(255,255,227));
                 int get=dice;  
                 flag=temp1;
                 temp1+=get;
-                if(temp1==57)
+                if(temp1==57){
                     finish1=true;
+                }
                 if(temp1>57)
                 temp1=flag;
                 t[temp1].setText("O1");
+                t[temp1].setBackground(new Color(255,100,100));      //Red
+                if(finish1){
+                     t[temp1].setBackground(new Color(255,255,0));
+                     t[temp1].setMargin(new Insets(0,20,0,0));
+                }
             } 
              if(dice==1&&!isalive1){
                  temp1=1;
                  t[temp1].setText("O1");
+                 t[temp1].setBackground(new Color(255,100,100));
                  p1.setText(" ");
                  isalive1=true;
             }
-            if(temp1==temp2)
-                dead(temp2,2);
-            if(temp1==temp3)
-                dead(temp3,3);
-            if(temp1==temp4)
-                dead(temp4,4);
+            if(temp1==temp2&&!finish1)
+                dead(2);
+            if(temp1==temp3&&!finish1)
+                dead(3);
+            if(temp1==temp4&&!finish1)
+                dead(4);
      }
      public void turn2(){
          if(isalive2){
          if(temp2>=14&&temp2<=51){
                  t[temp2].setText(" ");
+                 t[temp2].setBackground(new Color(255,255,227));
                  int get=dice; 
                  temp2+=get;
                  if(temp2==52)
@@ -291,9 +329,11 @@ public class ludo extends JFrame {
                  if(temp2==57)
                      temp2=5;
                  t[temp2].setText("O2");
+                 t[temp2].setBackground(new Color(255,100,100));
          }
-         if(temp2>=0&&temp2<=12){
+         else if(temp2>=0&&temp2<=12){
                  t[temp2].setText(" ");
+                 t[temp2].setBackground(new Color(255,255,227));
                  int get=dice;  
                  temp2+=get;
                  if(temp2==13)
@@ -309,9 +349,11 @@ public class ludo extends JFrame {
                  if(temp2==18)
                      temp2=57;
                  t[temp2].setText("O2");
+                 t[temp2].setBackground(new Color(255,100,100));
          }
-         if(temp2>=58&&temp2<=62){
+         else if(temp2>=58&&temp2<=62){
                  t[temp2].setText(" ");
+                 t[temp2].setBackground(new Color(255,255,227));
                  int get=dice; 
                  flag=temp2;
                  temp2+=get;
@@ -322,25 +364,32 @@ public class ludo extends JFrame {
                  if(temp2>62)
                      temp2=flag;
                  t[temp2].setText("O2");
+                 t[temp2].setBackground(new Color(255,100,100));
+                 if(finish2){
+                       t[temp2].setBackground(new Color(255,255,0));
+                       t[temp2].setMargin(new Insets(0,20,0,0));
+                }
          }
         }
          if(dice==1&&!isalive2){
                  temp2=14;
                  t[temp2].setText("O2");
+                 t[temp2].setBackground(new Color(255,100,100));
                  p2.setText(" ");
                  isalive2=true;
              }
-         if(temp2==temp1)
-                dead(temp1,1);
-         if(temp2==temp3)
-                dead(temp3,3);
-         if(temp2==temp4)
-                dead(temp4,4);
+         if(temp2==temp1&&!finish2)
+                dead(1);
+         if(temp2==temp3&&!finish2)
+                dead(3);
+         if(temp2==temp4&&!finish2)
+                dead(4);
      }
      public void turn3(){
          if(isalive3){
          if(temp3>=27&&temp3<=51){
                  t[temp3].setText(" ");
+                 t[temp3].setBackground(new Color(255,255,227));
                  int get=dice;  
                  temp3+=get;
                  if(temp3==52)
@@ -356,9 +405,11 @@ public class ludo extends JFrame {
                  if(temp3==57)
                      temp3=5;
                  t[temp3].setText("O3");
+                 t[temp3].setBackground(new Color(255,100,100));
          }
-         if(temp3>=0&&temp3<=25){
+         else if(temp3>=0&&temp3<=25){
                  t[temp3].setText(" ");
+                 t[temp3].setBackground(new Color(255,255,227));
                  int get=dice;  
                  temp3+=get;
                  if(temp3==26)
@@ -371,12 +422,20 @@ public class ludo extends JFrame {
                      temp3=66;
                  if(temp3==30)
                      temp3=67;
-                 if(temp3==31)
+                 if(temp3==31){
                      temp3=57;
+                     finish3=true;
+                 }
                  t[temp3].setText("O3");
+                 t[temp3].setBackground(new Color(255,100,100));
+                 if(finish3){
+                     t[temp3].setBackground(new Color(255,255,0));
+                     t[temp3].setMargin(new Insets(0,20,0,0));
+                }
          }
-         if(temp3>=63&&temp3<=67){
+         else if(temp3>=63&&temp3<=67){
                  t[temp3].setText(" ");
+                 t[temp3].setBackground(new Color(255,255,227));
                  int get=dice;  
                  flag=temp3;
                  temp3+=get;
@@ -387,25 +446,32 @@ public class ludo extends JFrame {
                  if(temp3>67)
                      temp3=flag;
                  t[temp3].setText("O3");
+                 t[temp3].setBackground(new Color(255,100,100));
+                 if(finish3){
+                     t[temp3].setBackground(new Color(255,100,100));
+                     t[temp3].setMargin(new Insets(0,20,0,0));
+                }
          }
         }
          if(dice==1&&!isalive3){
                  temp3=27;
                  t[temp3].setText("O3");
+                 t[temp3].setBackground(new Color(255,100,100));
                  p3.setText(" ");
                  isalive3=true;
              }
-         if(temp3==temp1)
-                dead(temp1,1);
-         if(temp3==temp2)
-                dead(temp2,2);
-         if(temp3==temp4)
-                dead(temp4,4);
+         if(temp3==temp1&&!finish3)
+                dead(1);
+         if(temp3==temp2&&!finish3)
+                dead(2);
+         if(temp3==temp4&&!finish3)
+                dead(4);
      }
      public void turn4(){
          if(isalive4){
          if(temp4>=40&&temp4<=51){
                  t[temp4].setText(" ");
+                 t[temp4].setBackground(new Color(255,255,227));
                  int get=dice; 
                  temp4+=get;
                  if(temp4==52)
@@ -421,9 +487,11 @@ public class ludo extends JFrame {
                  if(temp4==57)
                      temp4=5;
                  t[temp4].setText("O4");
+                 t[temp4].setBackground(new Color(255,100,100));
          }
-         if(temp4>=0&&temp4<=38){
+         else if(temp4>=0&&temp4<=38){
                  t[temp4].setText(" ");
+                 t[temp4].setBackground(new Color(255,255,227));
                  int get=dice; 
                  temp4+=get;
                  if(temp4==39)
@@ -439,9 +507,11 @@ public class ludo extends JFrame {
                  if(temp4==44)
                      temp4=57;
                  t[temp4].setText("O4");
+                 t[temp4].setBackground(new Color(255,100,100));
          }
-         if(temp4>=68&&temp4<=72){
+         else if(temp4>=68&&temp4<=72){
                  t[temp4].setText(" ");
+                 t[temp4].setBackground(new Color(255,255,227));
                  int get=dice;  
                  flag=temp4;
                  temp4+=get;
@@ -452,22 +522,28 @@ public class ludo extends JFrame {
                  if(temp4>72)
                      temp4=flag;
                  t[temp4].setText("O4");
+                 t[temp4].setBackground(new Color(255,100,100));
+                 if(finish4){
+                     t[temp4].setBackground(new Color(255,255,0));
+                     t[temp4].setMargin(new Insets(0,20,0,0));
+                }
          }
         } 
          if(dice==1&&!isalive4){
                  temp4=40;
                  t[temp4].setText("O4");
+                 t[temp4].setBackground(new Color(255,100,100));
                  p4.setText(" ");
                  isalive4=true;
              }
-         if(temp4==temp1)
-                dead(temp1,1);
-         if(temp4==temp2)
-                dead(temp2,2);
-         if(temp4==temp3)
-                dead(temp3,3);
+         if(temp4==temp1&&!finish4)
+                dead(1);
+         if(temp4==temp2&&!finish4)
+                dead(2);
+         if(temp4==temp3&&!finish4)
+                dead(3);
      }
-     public void dead(int a,int b){
+     public void dead(int b){
          if(b==1){
              isalive1=false;
              p1.setText("O1");
@@ -491,7 +567,7 @@ public class ludo extends JFrame {
      }
      public void winner(String a){
          if(!iswin){
-             winner.setText("Hurray "+a+" Won...");
+             winner.setText("Hurray "+a+" is King");
              iswin=true;
          }
      }
@@ -499,5 +575,4 @@ public class ludo extends JFrame {
 		ludo l=new ludo();
 
 	}
-
 }
